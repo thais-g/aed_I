@@ -2,7 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define NOME_MAX_TAM 50
+#define NOME_MAX_TAM 100
+#define TEL_MAX_TAM 15
 
 #define true 0
 #define false -1
@@ -13,7 +14,7 @@
 */
 typedef struct {
     char nome[NOME_MAX_TAM];
-    char numero_de_telefone[11];
+    char numero_de_telefone[TEL_MAX_TAM];
 } CONTATO;
 
 typedef struct aux {
@@ -58,6 +59,17 @@ PONT LCONTATO_buscaSequencial(LISTA_DE_CONTATOS* l, char *nome) {
         pos = pos->prox;
     }
     return NULL;
+}
+
+int LCONTATO_atualizaContato(LISTA_DE_CONTATOS* l, CONTATO contato) {
+    //Procura pelo nome do elemento
+    PONT elem = LCONTATO_buscaSequencial(l,contato.nome);
+    if(elem == NULL) return false;
+
+    //Atualiza o elemento
+    strcpy(elem->contato.numero_de_telefone,contato.numero_de_telefone);
+
+    return true;
 }
 
 PONT LCONTATO_buscaSequencialExc(LISTA_DE_CONTATOS* l, char *nome, PONT* ant){

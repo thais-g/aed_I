@@ -3,8 +3,7 @@
 #include <string.h>
 #include <mysql/mysql.h> // compilar gcc -o main main.c $(mysql_config --libs)
 #include "./contato/contato.h"
-
-#define ACTION_SIZE 10
+#include "contato/contato_mysql.h"
 
 MYSQL* obterConexao() {
     MYSQL *conn;
@@ -27,7 +26,9 @@ MYSQL* obterConexao() {
         printf("Conexão realizada\n");
         return conn;
     }
-};
+}
+
+#define ACTION_SIZE 10
 
 int main(void) {
 
@@ -35,7 +36,7 @@ int main(void) {
 
     MYSQL *conexao = obterConexao();
 
-    /*system("clear");
+    system("clear");
     printf("\n                        ");
     printf("###### Agenda Pessoal #######\n\n");
     printf("                        ");
@@ -48,12 +49,21 @@ int main(void) {
 
         //Leitura de ação
         printf("                        ");
-        printf("-> ");
+        printf("-action> ");
         scanf(" %[^\n]s", action);
         //
 
         if(strcmp(action,"c") == 0) {
             //Lista de Contatos 
+
+            //Puxar dados do banco
+            LISTA_DE_CONTATOS lista_de_contatos;
+            contatos_leituraDoBanco_construcaoDaLista(conexao,&lista_de_contatos);
+            //---//
+            
+            //Contato auxiliar 
+            CONTATO aux;
+            //---//
 
             system("clear");
             printf("\n                        ");
@@ -66,6 +76,8 @@ int main(void) {
             printf("Para adicionar um novo contato digite (add)\n\n");
             printf("                        ");
             printf("Para apagar um contato existente digite (remove)\n\n");
+            printf("                        ");
+            printf("Para atualizar um contato existente digite (update)\n\n");
 
             //Leitura de ação
             printf("                        ");
@@ -74,17 +86,49 @@ int main(void) {
             //
 
             if(strcmp(action,"show") == 0) {
-                
+
+                LCONTATO_exibirLista(&lista_de_contatos);
+
             } else if(strcmp(action,"add") == 0) {
 
+                printf("Me informe o nome do novo contato: ");
+                scanf(" %[^\n]s", aux.nome);
+                printf("Me informe o numero do novo contato: ");
+                scanf(" %[^\n]s", aux.numero_de_telefone);
+
+                //Inserir na lista do programa
+                LCONTATO_inserirElemListaOrd(&lista_de_contatos,aux);
+                //Inserir no banco de dados
+                contatos_insereNoBanco(conexao,aux.nome,aux.numero_de_telefone);
+
             } else if(strcmp(action,"remove") == 0) {
+
+                printf("Me informe o nome do contato que será removido: ");
+                scanf(" %[^\n]s", aux.nome);
+
+                //Remove da lista do programa
+                LCONTATO_excluirElemLista(&lista_de_contatos,aux.nome);
+                //Remover do banco de dados 
+                contatos_apagarDoBanco(conexao,aux.nome);
+
+            } else if(strcmp(action,"update") == 0) {
+
+                printf("Me informe o nome do contato que será atualizado: ");
+                scanf(" %[^\n]s", aux.nome);
+                printf("Me informe o novo numero do contato: ");
+                scanf(" %[^\n]s", aux.numero_de_telefone);
+
+                //Atualiza o elemento da lista 
+                LCONTATO_atualizaContato(&lista_de_contatos,aux);
+                //Atualiz o registro do banco
+                contatos_atualizarContato(conexao,aux.nome,aux.numero_de_telefone);
 
             }
 
         } else if(strcmp(action,"t") == 0) {
 
         } else break;
-    }*/
+    }
 
     return 0;
 }
