@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "menu.h"
-#include "agenda.h"
+#include "agenda (1).h"
 #include "contato.h"
 
 Contato *lista_contatos = NULL;
