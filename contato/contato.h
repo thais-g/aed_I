@@ -25,13 +25,13 @@ typedef ELEMENTO *PONT;
 
 typedef struct {
     PONT inicio;
-} LISTA;
+} LISTA_DE_CONTATOS;
 
-void inicializarLista(LISTA* l){
+void LCONTATO_inicializarLista(LISTA_DE_CONTATOS* l){
     l->inicio = NULL;
 }
 
-int tamanho(LISTA* l) {
+int LCONTATO_tamanho(LISTA_DE_CONTATOS* l) {
     PONT end = l->inicio;
     int tam = 0;
     while (end != NULL) {
@@ -41,7 +41,7 @@ int tamanho(LISTA* l) {
     return tam;
 }
 
-void exibirLista(LISTA* l){
+void LCONTATO_exibirLista(LISTA_DE_CONTATOS* l){
     PONT end = l->inicio;
     printf("Lista: \n");
     while (end != NULL) {
@@ -51,7 +51,7 @@ void exibirLista(LISTA* l){
 }
 
 //Função de procura por um nome específico
-PONT buscaSequencial(LISTA* l, char *nome) {
+PONT LCONTATO_buscaSequencial(LISTA_DE_CONTATOS* l, char *nome) {
     PONT pos = l->inicio;
     while (pos != NULL) {
         if (strcmp(pos->contato.nome,nome) == 0) return pos;
@@ -60,13 +60,13 @@ PONT buscaSequencial(LISTA* l, char *nome) {
     return NULL;
 }
 
-PONT buscaSequencialExc(LISTA* l, char *nome, PONT* ant){
+PONT LCONTATO_buscaSequencialExc(LISTA_DE_CONTATOS* l, char *nome, PONT* ant){
     *ant = NULL;
     PONT atual = l->inicio;
+    
     /**
-     * Organização por chaves crescentes
-     * A dinâmica precisa ser mudada pra organização em ordem 
-     * alfabética
+     * Dinâmica de organização por 
+     * ordem alfabética
     */
     while ((atual != NULL) && (strcmp(atual->contato.nome,nome) < 0)) {
         *ant = atual;
@@ -76,13 +76,13 @@ PONT buscaSequencialExc(LISTA* l, char *nome, PONT* ant){
     return NULL;
 }
 
-int inserirElemListaOrd(LISTA* l, CONTATO contato) {
+int LCONTATO_inserirElemListaOrd(LISTA_DE_CONTATOS* l, CONTATO contato) {
     char nome[NOME_MAX_TAM];
     //copiar o nome passado como parametro
     //para uma variavel de controle
     strcpy(nome,contato.nome);
     PONT ant, i;
-    i = buscaSequencialExc(l,nome,&ant);
+    i = LCONTATO_buscaSequencialExc(l,nome,&ant);
     if (i != NULL) return false;
     i = (PONT) malloc(sizeof(ELEMENTO));
     i->contato = contato;
@@ -96,9 +96,9 @@ int inserirElemListaOrd(LISTA* l, CONTATO contato) {
     return true;
 }
 
-int excluirElemLista(LISTA* l, char *nome) {
+int LCONTATO_excluirElemLista(LISTA_DE_CONTATOS* l, char *nome) {
     PONT ant, i;
-    i = buscaSequencialExc(l,nome,&ant);
+    i = LCONTATO_buscaSequencialExc(l,nome,&ant);
     if (i == NULL) return false;
     if (ant == NULL) l->inicio = i->prox;
     else ant->prox = i->prox;
