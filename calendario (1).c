@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "agenda.h"
-#include "calendario.h"
+#include "agenda (1).h"
+#include "calendario (2).h"
 #include "menu.h"
 
 int dias_do_mes[]={0,31,28,31,30,31,30,31,31,30,31,30,31};

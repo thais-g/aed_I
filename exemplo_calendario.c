@@ -1,12 +1,12 @@
 /*
  	Compilar:
  	gcc -c menu.c
- 	gcc -c calendario.c
- 	gcc exemplo_calendario.c menu.o calendario.o -o excal
+ 	gcc -c calendario\ \(1\).c 
+ 	gcc exemplo_calendario.c menu.o calendario\ \(1\).o -o excal
 */
 
 #include <stdio.h>
-#include "calendario.h"
+#include "calendario (2).h"
 
 int main()
 {
