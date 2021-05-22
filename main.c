@@ -36,7 +36,6 @@ int main(void) {
 
     MYSQL *conexao = obterConexao();
 
-
     system("clear");
     printf("    ###### Agenda Pessoal #######\n");
     for(;;) {
@@ -62,9 +61,9 @@ int main(void) {
             //---//
 
             system("clear");
-            printf("    ###### Agenda Pessoal #######\n\n");
+            printf("    ###### Agenda Pessoal #######\n");
 
-            printf("    Contatos\n\n");
+            printf("\n    (Contatos)\n\n");
             
             printf("    -Para ver todos os contatos registrados digite (show)\n\n");
             printf("    -Para adicionar um novo contato digite (add)\n\n");
@@ -78,7 +77,9 @@ int main(void) {
 
             if(strcmp(action,"show") == 0) {
                 system("clear");
-                printf("    ###### Agenda Pessoal #######\n\n");
+                printf("    ###### Agenda Pessoal #######\n");
+
+                printf("\n    (Contatos)\n\n");
 
                 LCONTATO_exibirLista(&lista_de_contatos);
 
@@ -93,6 +94,8 @@ int main(void) {
                 LCONTATO_inserirElemListaOrd(&lista_de_contatos,aux);
                 //Inserir no banco de dados
                 contatos_insereNoBanco(conexao,aux.nome,aux.numero_de_telefone);
+                system("clear");
+                printf("    ###### Agenda Pessoal #######\n");
 
             } else if(strcmp(action,"remove") == 0) {
 
@@ -103,6 +106,8 @@ int main(void) {
                 LCONTATO_excluirElemLista(&lista_de_contatos,aux.nome);
                 //Remover do banco de dados 
                 contatos_apagarDoBanco(conexao,aux.nome);
+                system("clear");
+                printf("    ###### Agenda Pessoal #######\n");
 
             } else if(strcmp(action,"update") == 0) {
 
@@ -115,6 +120,8 @@ int main(void) {
                 LCONTATO_atualizaContato(&lista_de_contatos,aux);
                 //Atualiz o registro do banco
                 contatos_atualizarContato(conexao,aux.nome,aux.numero_de_telefone);
+                system("clear");
+                printf("    ###### Agenda Pessoal #######\n");
 
             }
 
