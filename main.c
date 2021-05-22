@@ -36,20 +36,16 @@ int main(void) {
 
     MYSQL *conexao = obterConexao();
 
-    system("clear");
-    printf("\n                        ");
-    printf("###### Agenda Pessoal #######\n\n");
-    printf("                        ");
-    printf("-Contatos (c)\n\n");
-    printf("                        ");
-    printf("-Tarefas (t)\n\n");
-    
 
+    system("clear");
+    printf("    ###### Agenda Pessoal #######\n");
     for(;;) {
 
+        printf("\n    -Contatos (c)\n\n");
+        printf("    -Tarefas (t)\n\n");
+
         //Leitura de ação
-        printf("                        ");
-        printf("-action> ");
+        printf("    > ");
         scanf(" %[^\n]s", action);
         //
 
@@ -66,34 +62,31 @@ int main(void) {
             //---//
 
             system("clear");
-            printf("\n                        ");
-            printf("###### Agenda Pessoal #######\n");
-            printf("                        ");
-            printf("###### Lista de Contatos ####\n\n");
-            printf("                        ");
-            printf("Para ver todos os contatos registrados digite (show)\n\n");
-            printf("                        ");
-            printf("Para adicionar um novo contato digite (add)\n\n");
-            printf("                        ");
-            printf("Para apagar um contato existente digite (remove)\n\n");
-            printf("                        ");
-            printf("Para atualizar um contato existente digite (update)\n\n");
+            printf("    ###### Agenda Pessoal #######\n\n");
+
+            printf("    Contatos\n\n");
+            
+            printf("    -Para ver todos os contatos registrados digite (show)\n\n");
+            printf("    -Para adicionar um novo contato digite (add)\n\n");
+            printf("    -Para apagar um contato existente digite (remove)\n\n");
+            printf("    -Para atualizar um contato existente digite (update)\n\n");
 
             //Leitura de ação
-            printf("                        ");
-            printf("-> ");
+            printf("    > ");
             scanf(" %[^\n]s", action);
             //
 
             if(strcmp(action,"show") == 0) {
+                system("clear");
+                printf("    ###### Agenda Pessoal #######\n\n");
 
                 LCONTATO_exibirLista(&lista_de_contatos);
 
             } else if(strcmp(action,"add") == 0) {
 
-                printf("Me informe o nome do novo contato: ");
+                printf("\n    Me informe o nome do novo contato: ");
                 scanf(" %[^\n]s", aux.nome);
-                printf("Me informe o numero do novo contato: ");
+                printf("\n    Me informe o numero do novo contato: ");
                 scanf(" %[^\n]s", aux.numero_de_telefone);
 
                 //Inserir na lista do programa
@@ -103,7 +96,7 @@ int main(void) {
 
             } else if(strcmp(action,"remove") == 0) {
 
-                printf("Me informe o nome do contato que será removido: ");
+                printf("\n    Me informe o nome do contato que será removido: ");
                 scanf(" %[^\n]s", aux.nome);
 
                 //Remove da lista do programa
@@ -113,9 +106,9 @@ int main(void) {
 
             } else if(strcmp(action,"update") == 0) {
 
-                printf("Me informe o nome do contato que será atualizado: ");
+                printf("\n    Me informe o nome do contato que será atualizado: ");
                 scanf(" %[^\n]s", aux.nome);
-                printf("Me informe o novo numero do contato: ");
+                printf("\n    Me informe o novo numero do contato: ");
                 scanf(" %[^\n]s", aux.numero_de_telefone);
 
                 //Atualiza o elemento da lista 
