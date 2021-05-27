@@ -4,6 +4,7 @@
 #include <mysql/mysql.h> // compilar gcc -o main main.c $(mysql_config --libs)
 #include "./contato/contato.h"
 #include "contato/contato_mysql.h"
+#include "anotacao.h"
 
 MYSQL* obterConexao() {
     MYSQL *conn;
@@ -42,6 +43,7 @@ int main(void) {
 
         printf("\n    -Contatos (c)\n\n");
         printf("    -Tarefas (t)\n\n");
+        printf("    -Diario (d)\n\n")/
 
         //Leitura de ação
         printf("    > ");
@@ -127,7 +129,12 @@ int main(void) {
 
         } else if(strcmp(action,"t") == 0) {
 
-        } else break;
+        } else if(strcmp(action, "d") == 0)
+        {
+            diario_func();
+        }
+        
+         else break;
     }
 
     return 0;
