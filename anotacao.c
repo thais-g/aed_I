@@ -92,6 +92,7 @@ struct pilha *iniciar_pilha()
 	p = (struct pilha*) malloc(sizeof(struct pilha));
 	p->topo = NULL;
 	p->tam = 0;
+	return p;
 }
 
 int pilha_vazia(struct pilha *p)
