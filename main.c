@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <mysql/mysql.h> // compilar gcc -o main main.c $(mysql_config --libs)
-#include "./contato/contato.h"
-#include "./tarefas/tarefas.h"
+#include "contato.h"
+#include "tarefas.h"
 #include "anotacao.h"
 
 MYSQL* obterConexao() {

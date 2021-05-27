@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <mysql/mysql.h> // compilar gcc -o main main.c $(mysql_config --libs)
 
 #define NOME_MAX_TAM 30
 #define TEL_MAX_TAM 15
