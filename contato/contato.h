@@ -17,23 +17,24 @@ typedef struct {
     char numero_de_telefone[TEL_MAX_TAM];
 } CONTATO;
 
-typedef struct aux {
+typedef struct aux_C {
     CONTATO contato;
-    struct aux *prox;
-} ELEMENTO;
+    struct aux_C *prox;
+} ELEMENTO_C;
 
-typedef ELEMENTO *PONT;
+typedef ELEMENTO_C *PONT_C;
 
 typedef struct {
-    PONT inicio;
+    PONT_C inicio;
 } LISTA_DE_CONTATOS;
 
+//Lista
 void LCONTATO_inicializarLista(LISTA_DE_CONTATOS* l){
     l->inicio = NULL;
 }
 
 int LCONTATO_tamanho(LISTA_DE_CONTATOS* l) {
-    PONT end = l->inicio;
+    PONT_C end = l->inicio;
     int tam = 0;
     while (end != NULL) {
         tam++;
@@ -43,7 +44,7 @@ int LCONTATO_tamanho(LISTA_DE_CONTATOS* l) {
 }
 
 void LCONTATO_exibirLista(LISTA_DE_CONTATOS* l){
-    PONT end = l->inicio;
+    PONT_C end = l->inicio;
     printf("    +-------------------------------+-----------+\n");
     printf("    | Nome                          | Telefone  |\n");
     printf("    +-------------------------------+-----------+\n");
@@ -127,8 +128,8 @@ void LCONTATO_exibirLista(LISTA_DE_CONTATOS* l){
 }
 
 //Função de procura por um nome específico
-PONT LCONTATO_buscaSequencial(LISTA_DE_CONTATOS* l, char *nome) {
-    PONT pos = l->inicio;
+PONT_C LCONTATO_buscaSequencial(LISTA_DE_CONTATOS* l, char *nome) {
+    PONT_C pos = l->inicio;
     while (pos != NULL) {
         if (strcmp(pos->contato.nome,nome) == 0) return pos;
         pos = pos->prox;
@@ -138,7 +139,7 @@ PONT LCONTATO_buscaSequencial(LISTA_DE_CONTATOS* l, char *nome) {
 
 int LCONTATO_atualizaContato(LISTA_DE_CONTATOS* l, CONTATO contato) {
     //Procura pelo nome do elemento
-    PONT elem = LCONTATO_buscaSequencial(l,contato.nome);
+    PONT_C elem = LCONTATO_buscaSequencial(l,contato.nome);
     if(elem == NULL) return false;
 
     //Atualiza o elemento
@@ -147,9 +148,9 @@ int LCONTATO_atualizaContato(LISTA_DE_CONTATOS* l, CONTATO contato) {
     return true;
 }
 
-PONT LCONTATO_buscaSequencialExc(LISTA_DE_CONTATOS* l, char *nome, PONT* ant){
+PONT_C LCONTATO_buscaSequencialExc(LISTA_DE_CONTATOS* l, char *nome, PONT_C* ant){
     *ant = NULL;
-    PONT atual = l->inicio;
+    PONT_C atual = l->inicio;
     
     /**
      * Dinâmica de organização por 
@@ -168,10 +169,10 @@ int LCONTATO_inserirElemListaOrd(LISTA_DE_CONTATOS* l, CONTATO contato) {
     //copiar o nome passado como parametro
     //para uma variavel de controle
     strcpy(nome,contato.nome);
-    PONT ant, i;
+    PONT_C ant, i;
     i = LCONTATO_buscaSequencialExc(l,nome,&ant);
     if (i != NULL) return false;
-    i = (PONT) malloc(sizeof(ELEMENTO));
+    i = (PONT_C) malloc(sizeof(ELEMENTO_C));
     i->contato = contato;
     if (ant == NULL) {
         i->prox = l->inicio;
@@ -184,11 +185,73 @@ int LCONTATO_inserirElemListaOrd(LISTA_DE_CONTATOS* l, CONTATO contato) {
 }
 
 int LCONTATO_excluirElemLista(LISTA_DE_CONTATOS* l, char *nome) {
-    PONT ant, i;
+    PONT_C ant, i;
     i = LCONTATO_buscaSequencialExc(l,nome,&ant);
     if (i == NULL) return false;
     if (ant == NULL) l->inicio = i->prox;
     else ant->prox = i->prox;
     free(i);
     return true;
+}
+
+//MYSQL
+void contatos_leituraDoBanco_construcaoDaLista(MYSQL *conexao, LISTA_DE_CONTATOS *l) {
+    MYSQL_RES *result;
+    MYSQL_ROW row;
+
+    if(mysql_query(conexao, "SELECT * FROM contatos")) {
+        mysql_error(conexao);
+    }
+
+    result = mysql_store_result(conexao);
+    if(result == NULL) {
+        mysql_error(conexao);
+    }
+
+    //Configuração da Lista de Contatos 
+    LCONTATO_inicializarLista(l);
+
+    //Contato auxiliar 
+    CONTATO aux_C;
+
+    while((row = mysql_fetch_row(result)) != NULL) {
+        strcpy(aux_C.nome,row[0]);
+        strcpy(aux_C.numero_de_telefone,row[1]);
+
+        //Insere elemento da lsita ligada do programa
+        LCONTATO_inserirElemListaOrd(l,aux_C);
+    }
+
+    mysql_free_result(result);
+}
+
+void contatos_insereNoBanco(MYSQL *conexao, char *nome, char * numero_de_telefone) {
+
+    char query[100];
+    sprintf(query, "INSERT INTO contatos(nome,tel) VALUES ('%s', '%s');", nome, numero_de_telefone);
+
+    if(mysql_query(conexao,query)) {
+        mysql_error(conexao);
+    }
+}
+
+void contatos_atualizarContato(MYSQL *conexao, char *nome, char * numero_de_telefone) {
+
+    char query[100];
+    sprintf(query, "UPDATE contatos SET tel = '%s' WHERE nome = '%s';",numero_de_telefone, nome);
+
+    if(mysql_query(conexao,query)) {
+        mysql_error(conexao);
+    }
+}
+
+void contatos_apagarDoBanco(MYSQL *conexao, char *nome) {
+    
+    char query[100];
+    sprintf(query, "DELETE FROM contatos WHERE nome = '%s';", nome);
+
+    if(mysql_query(conexao,query)) {
+        
+        mysql_error(conexao);
+    }
 }

@@ -3,8 +3,8 @@
 #include <string.h>
 #include <mysql/mysql.h> // compilar gcc -o main main.c $(mysql_config --libs)
 #include "./contato/contato.h"
-#include "contato/contato_mysql.h"
-#include "anotacao.h"
+#include "./tarefas/tarefas.h"
+#include "anotacao.c"
 
 MYSQL* obterConexao() {
     MYSQL *conn;
@@ -127,11 +127,74 @@ int main(void) {
 
             }
 
+            //reinicialização
+
         } else if(strcmp(action,"t") == 0) {
+            //Lista de Tarefas 
+
+            //Puxar dados do banco
+            LISTA_DE_TAREFAS lista_de_tarefas;
+            tarefas_leituraDoBanco_construcaoDaLista(conexao,&lista_de_tarefas);
+            //---//
+
+            //Tarefa auxiliar 
+            TAREFA aux;
+            //---//
+
+            system("clear");
+            printf("    ###### Agenda Pessoal #######\n");
+
+            printf("\n    (Tarefas)\n\n");
+            
+            printf("    -Para ver todos as tarefas registradas digite (show)\n\n");
+            printf("    -Para adicionar uma nova tarefa digite (add)\n\n");
+            printf("    -Para apagar uma tarefa existente digite (remove)\n\n");
+
+            //Leitura de ação
+            printf("    > ");
+            scanf(" %[^\n]s", action);
+            //
+
+            if(strcmp(action,"show") == 0) {
+                system("clear");
+                printf("    ###### Agenda Pessoal #######\n");
+
+                printf("\n    (Tarefas)\n\n");
+
+                TAREFAS_exibirLista(&lista_de_tarefas);
+
+            } else if(strcmp(action,"add") == 0) {
+
+                printf("\n    Me informe a nova tarefa: ");
+                scanf(" %[^\n]s", aux.text);
+
+                //Inserir na lista do programa
+                int ch = TAREFAS_inserirElemListaOrd(&lista_de_tarefas,aux);
+                //Inserir no banco de dados
+                tarefas_insereNoBanco(conexao,aux.text,ch);
+                system("clear");
+                printf("    ###### Agenda Pessoal #######\n");
+
+            } else if(strcmp(action,"remove") == 0) {
+
+                printf("\n    Me informe o numero da tarefa que será removida: ");
+                scanf(" %i", &aux.ch);
+
+                
+                //Remover do banco de dados 
+                tarefas_apagarDoBanco(conexao,aux.ch);
+                
+                //Remove da lista do programa
+                TAREFAS_excluirElemLista(conexao,&lista_de_tarefas,aux.ch);
+
+                system("clear");
+                printf("    ###### Agenda Pessoal #######\n");
+
+            }
 
         } else if(strcmp(action, "d") == 0)
         {
-            diario_func();
+            diario_func(27,5,2021);
         }
         
          else break;
