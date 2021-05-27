@@ -12,3 +12,6 @@ Ele funciona com um Banco de Dados local pré configurado:
 - Tabelas:
 -   contatos (nome,tel)
 -   tarefas (texto,chave)
+
+O programa está configurado para rodar em ambiente linux 
+com alguns comando de sistema que não funcionam no Windows
