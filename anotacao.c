@@ -179,7 +179,7 @@ void print_diario()
     fclose(fptr);
 }
 
-void diario_func(int dia, int mes, int ano)
+void diario_func()
 {
     struct pilha *p = iniciar_pilha();
 	struct no *nova_linha;
@@ -198,7 +198,7 @@ void diario_func(int dia, int mes, int ano)
 		}
 		printf("\e[1;1H\e[2J");
         print_diario();
-        printf("######## Anotações ########\n");
+        printf("######## Anotações ########\n(CTRL+L para encerrar a inserção da anotação)\n");
 		mostrar_pilha(p->topo, p, 0);
 		printf("%c", cursor);
 		tecla = getch();

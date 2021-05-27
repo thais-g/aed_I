@@ -4,7 +4,7 @@
 #include <mysql/mysql.h> // compilar gcc -o main main.c $(mysql_config --libs)
 #include "./contato/contato.h"
 #include "./tarefas/tarefas.h"
-#include "anotacao.c"
+#include "anotacao.h"
 
 MYSQL* obterConexao() {
     MYSQL *conn;
@@ -194,7 +194,7 @@ int main(void) {
 
         } else if(strcmp(action, "d") == 0)
         {
-            diario_func(27,5,2021);
+            diario_func();
         }
         
          else break;
